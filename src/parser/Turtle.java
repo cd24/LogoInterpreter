@@ -7,6 +7,8 @@ import javafx.geometry.Point2D;
  * Created by John McAvey on 2/18/2015.
  */
 public class Turtle {
+
+    public static final double CANVAS_MIDDLE_X = 309.0, CANVAS_MIDDLE_Y = 215.0;
     private static Turtle ourInstance = new Turtle();
     private double heading, x, y;
 
@@ -48,18 +50,20 @@ public class Turtle {
 
     public Point2D turnLeft(double theta){
         this.heading -= Math.toRadians(theta);
-
         return this.asPoint();
     }
 
     public Point2D turnRight(double theta){
         this.heading += Math.toRadians(theta);
-
         return this.asPoint();
     }
 
     public Point2D asPoint() {
         Point2D point = new Point2D(x, y);
         return point;
+    }
+
+    public double getRotation(){
+        return Math.toDegrees(this.heading);
     }
 }
