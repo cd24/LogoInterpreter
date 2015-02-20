@@ -14,11 +14,7 @@
    <center>
       <Pane fx:id="canvas" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="turtleImage" fitHeight="25.0" fitWidth="27.0" layoutX="289.0" layoutY="192.0">
-               <image>
-                  <Image url="@../../di07G.png" />
-               </image>
-            </ImageView>
+            <Ellipse fx:id="turtleImage" fill="DODGERBLUE" layoutX="309.0" layoutY="215.0" radiusX="7.0" radiusY="4.0" stroke="BLACK" strokeType="INSIDE" />
          </children></Pane>
    </center>
    <left>
@@ -26,20 +22,23 @@
          <children>
             <BorderPane>
                <left>
-                  <Button fx:id="left" mnemonicParsing="false" onAction="#moveLeft" text="Turn Left" BorderPane.alignment="CENTER" />
+                  <Button fx:id="left" mnemonicParsing="false" onAction="#moveLeft" text="  Left " BorderPane.alignment="CENTER" />
                </left>
                <top>
                   <Button fx:id="forward" mnemonicParsing="false" onAction="#moveForward" text="Forward" BorderPane.alignment="CENTER" />
                </top>
                <right>
-                  <Button fx:id="right" mnemonicParsing="false" onAction="#moveRight" text="Turn Right" BorderPane.alignment="CENTER" />
+                  <Button fx:id="right" mnemonicParsing="false" onAction="#moveRight" text="Right" BorderPane.alignment="CENTER" />
                </right>
                <bottom>
                   <Button fx:id="backward" mnemonicParsing="false" onAction="#moveBackward" text="Backwards" BorderPane.alignment="CENTER" />
                </bottom>
+               <center>
+                  <Button fx:id="reset" mnemonicParsing="false" onAction="#resetBoard" text="Reset" BorderPane.alignment="CENTER" />
+               </center>
             </BorderPane>
             <TextArea fx:id="passedCommands" prefHeight="670.0" prefWidth="154.0" />
-            <TextField fx:id="singleCommand" />
+            <TextField fx:id="singleCommand" onAction="#giveSingleCommand" />
          </children>
       </VBox>
    </left>
