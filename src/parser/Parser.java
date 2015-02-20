@@ -57,16 +57,23 @@ public class Parser implements Runnable{
             else if (parseTree.hasNamed("cmd")){
                 return interpret(parseTree.getChild(0));
             }
+            return interpret(parseTree.getChild(0));
         }
 
         else if (parseTree.isNamed("assignment")){
             String variableName = parseTree.getNamedChild("variable").toString();
             Integer value = interpret(parseTree.getNamedChild("addSubOp"));
             variables.put(variableName, value);
+            Controller.publicVariables.put(variableName, value);
         }
 
         else if (parseTree.isNamed("variable")) {
-            return variables.get(parseTree.toString());
+            if (variables.containsKey(parseTree.toString())){
+                return variables.get(parseTree.toString());
+            }
+            else if (Controller.publicVariables.containsKey(parseTree.toString())){
+                return Controller.publicVariables.get(parseTree.toString());
+            }
         }
 
         else if (parseTree.isNamed("addSubOp")){
@@ -94,6 +101,9 @@ public class Parser implements Runnable{
 
         else if (parseTree.isNamed("paren")){
             if (parseTree.hasNamed("num")){
+                if (parseTree.getNamedChild("num").hasNamed("variable")) {
+                    return interpret(parseTree.getChild(0));
+                }
                 return Integer.parseInt(parseTree.getNamedChild("num").toString());
             }
             else {
@@ -101,73 +111,104 @@ public class Parser implements Runnable{
             }
         }
 
+        else if (parseTree.isNamed("loop")){
+            int numRepeats = interpret(parseTree.getNamedChild("addSubOp"));
+            System.out.println("Called, looping for " + numRepeats + " times!");
+            for (int i = 0; i < numRepeats; ++i){
+                interpret(parseTree.getNamedChild("cmd"));
+            }
+        }
+
         else if (parseTree.isNamed("cmd")) {
-            if (parseTree.hasNamed("fd")){
-                parseTree = parseTree.getChild(0);
-                int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
-                Point2D currentPos = turtle.asPoint();
-                Point2D newPos = turtle.moveForward(moveDist);
-
-                makeLine(currentPos, newPos);
+            if (parseTree.getNumChildren() == 1){
+                handleCommand(parseTree);
             }
-            else if (parseTree.hasNamed("bk")){
-                parseTree = parseTree.getChild(0);
-                int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
-                Point2D currentPos = turtle.asPoint();
-                Point2D newPos = turtle.moveBackward(moveDist);
-
-                makeLine(currentPos, newPos);
-            }
-            else if (parseTree.hasNamed("lt")){
-                parseTree = parseTree.getChild(0);
-                int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
-                Point2D currentPos = turtle.asPoint();
-                Point2D newPos = turtle.turnLeft(rotateAngle);
-
-                makeLine(currentPos, newPos);
-            }
-            else if (parseTree.hasNamed("rt")){
-                parseTree = parseTree.getChild(0);
-                int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
-                Point2D currentPos = turtle.asPoint();
-                Point2D newPos = turtle.turnRight(rotateAngle);
-
-                makeLine(currentPos, newPos);
-            }
-            else if (parseTree.hasNamed("pd")){
-
-            }
-            else if (parseTree.hasNamed("pu")){
-
-            }
-            else if (parseTree.hasNamed("home")){
-
-            }
-            else if (parseTree.hasNamed("cs")){
-
-            }
-            else if (parseTree.hasNamed("st")){
-
-            }
-            else if (parseTree.hasNamed("ht")){
-
+            else {
+                interpret(parseTree.getNamedChild("cmd"));
+                handleCommand(parseTree);
             }
         }
         return 0;
     }
 
     public void makeLine(Point2D current, Point2D end){
-        Line line = new Line();
-        line.setStartX(current.getX());
-        line.setStartY(current.getY());
-        line.setEndX(end.getX());
-        line.setEndY(end.getY());
+        if (Controller.isPenDown()) {
+            Line line = new Line();
+            line.setStartX(current.getX());
+            line.setStartY(current.getY());
+            line.setEndX(end.getX());
+            line.setEndY(end.getY());
+            line.setId("line");
+            canvasChildren.add(line);
+        }
 
         turtleImage.setTranslateX(end.getX() - Turtle.CANVAS_MIDDLE_X);
         turtleImage.setTranslateY(end.getY() - Turtle.CANVAS_MIDDLE_Y);
         turtleImage.setRotate(turtle.getRotation() + 90);
-        
-        canvasChildren.add(line);
+
+
+    }
+
+    public void handleCommand(Tree parseTree){
+        if (parseTree.hasNamed("fd")){
+            parseTree = parseTree.getNamedChild("fd");
+            int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
+            Point2D currentPos = turtle.asPoint();
+            Point2D newPos = turtle.moveForward(moveDist);
+
+            makeLine(currentPos, newPos);
+        }
+        else if (parseTree.hasNamed("bk")){
+            parseTree = parseTree.getNamedChild("bk");
+            int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
+            Point2D currentPos = turtle.asPoint();
+            Point2D newPos = turtle.moveBackward(moveDist);
+
+            makeLine(currentPos, newPos);
+        }
+        else if (parseTree.hasNamed("lt")){
+            parseTree = parseTree.getNamedChild("lt");
+            int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
+            Point2D currentPos = turtle.asPoint();
+            Point2D newPos = turtle.turnLeft(rotateAngle);
+
+            makeLine(currentPos, newPos);
+        }
+        else if (parseTree.hasNamed("rt")){
+            parseTree = parseTree.getNamedChild("rt");
+            int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
+            Point2D currentPos = turtle.asPoint();
+            Point2D newPos = turtle.turnRight(rotateAngle);
+
+            makeLine(currentPos, newPos);
+        }
+        else if (parseTree.hasNamed("pd")){
+            if (!Controller.isPenDown()){
+                Controller.setPenDown(true);
+            }
+        }
+        else if (parseTree.hasNamed("pu")){
+            if (Controller.isPenDown()){
+                Controller.setPenDown(false);
+            }
+        }
+        else if (parseTree.hasNamed("home")){
+            turtleImage.setTranslateX(0);
+            turtleImage.setTranslateY(0);
+        }
+        else if (parseTree.hasNamed("cs")){
+            for (Node item : canvasChildren){
+                if (item.getId() != null && item.getId().equals("line")){
+                    canvasChildren.remove(item);
+                }
+            }
+        }
+        else if (parseTree.hasNamed("st")){
+            turtleImage.setVisible(true);
+        }
+        else if (parseTree.hasNamed("ht")){
+            turtleImage.setVisible(false);
+        }
     }
 
     public void run(){
@@ -175,6 +216,7 @@ public class Parser implements Runnable{
             parse();
         } catch (ParseException e) {
             //ToDo: get information back to the user... somehow.
+            e.printStackTrace();
         }
     }
 }

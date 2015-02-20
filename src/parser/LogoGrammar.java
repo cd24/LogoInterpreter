@@ -5,9 +5,10 @@ public class LogoGrammar extends edu.hendrix.grambler.Grammar {
         super();
         addProduction("lines", new String[]{"lines", "line"}, new String[]{"line"});
         addProduction("line", new String[]{"expr", "\"\\r\\n\""}, new String[]{"expr", "\"\\n\""}, new String[]{"expr"});
-        addProduction("expr", new String[]{"assignment"}, new String[]{"addSubOp"}, new String[]{"cmd"});
-        addProduction("cmd", new String[]{"fd"}, new String[]{"bk"}, new String[]{"lt"}, new String[]{"rt"}, new String[]{"pd"}, new String[]{"pu"}, new String[]{"home"}, new String[]{"cs"}, new String[]{"st"}, new String[]{"ht"});
+        addProduction("expr", new String[]{"assignment"}, new String[]{"addSubOp"}, new String[]{"cmd"}, new String[]{"loop"});
+        addProduction("cmd", new String[]{"cmd", "space", "fd"}, new String[]{"cmd", "space", "bk"}, new String[]{"cmd", "space", "lt"}, new String[]{"cmd", "space", "rt"}, new String[]{"cmd", "space", "pd"}, new String[]{"cmd", "space", "pu"}, new String[]{"cmd", "space", "home"}, new String[]{"cmd", "space", "cs"}, new String[]{"cmd", "space", "st"}, new String[]{"cmd", "space", "ht"}, new String[]{"fd"}, new String[]{"bk"}, new String[]{"lt"}, new String[]{"rt"}, new String[]{"pd"}, new String[]{"pu"}, new String[]{"home"}, new String[]{"cs"}, new String[]{"st"}, new String[]{"ht"});
         addProduction("assignment", new String[]{"variable", "space", "\"=\"", "space", "addSubOp"});
+        addProduction("loop", new String[]{"'repeat'", "space", "addSubOp", "space", "'['", "space", "cmd", "space", "']'"});
         addProduction("addSubD", new String[]{"'+'"}, new String[]{"'-'"});
         addProduction("multDivD", new String[]{"'*'"}, new String[]{"'/'"});
         addProduction("addSubOp", new String[]{"addSubOp", "space", "addSubD", "space", "multDivOp"}, new String[]{"multDivOp"});

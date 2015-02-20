@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
@@ -46,6 +47,9 @@ public class Controller implements Initializable{
 
     Thread evalThread = new Thread();
 
+    public static boolean penDown = true;
+
+    public static HashMap<String, Integer> publicVariables = new HashMap<>();
 
 
     void initialize() {
@@ -115,17 +119,19 @@ public class Controller implements Initializable{
     }
 
     void createLine(Point2D start, Point2D end){
-        Line connector = new Line();
-        connector.setStartX(start.getX());
-        connector.setStartY(start.getY());
-        connector.setEndX(end.getX());
-        connector.setEndY(end.getY());
-        canvas.getChildren().add(connector);
+        if (penDown) {
+            Line connector = new Line();
+            connector.setStartX(start.getX());
+            connector.setStartY(start.getY());
+            connector.setEndX(end.getX());
+            connector.setEndY(end.getY());
+            canvas.getChildren().add(connector);
+        }
     }
 
     @FXML
     void issueCommand(String command){
-        Parser parser = new Parser(turtleImage, canvas.getChildren(), command);
+        Parser parser = new Parser(turtleImage, canvas.getChildren(), command.toLowerCase()); //lower for case-insensitive
         Platform.runLater(parser);
         passedCommands.appendText(command + "\n");
     }
@@ -136,5 +142,13 @@ public class Controller implements Initializable{
             issueCommand(singleCommand.getText());
         }
         singleCommand.setText("");
+    }
+
+    public static boolean isPenDown(){
+        return penDown;
+    }
+
+    public static void setPenDown(boolean down){
+        penDown = down;
     }
 }
