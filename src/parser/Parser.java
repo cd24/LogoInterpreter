@@ -142,8 +142,8 @@ public class Parser implements Runnable{
             canvasChildren.add(line);
         }
 
-        turtleImage.setTranslateX(end.getX() - Turtle.CANVAS_MIDDLE_X);
-        turtleImage.setTranslateY(end.getY() - Turtle.CANVAS_MIDDLE_Y);
+        turtleImage.setTranslateX(end.getX() - Turtle.CENTER_X);
+        turtleImage.setTranslateY(end.getY() - Turtle.CENTER_Y);
         turtleImage.setRotate(turtle.getRotation() + 90);
 
 

@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
  */
 public class Turtle {
 
-    public static final double CANVAS_MIDDLE_X = 309.0, CANVAS_MIDDLE_Y = 215.0;
+    public static final double CENTER_X = 309.0, CENTER_Y = 215.0;
     private static Turtle ourInstance = new Turtle();
     private double heading, x, y;
 
