@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
@@ -48,6 +49,8 @@ public class Controller implements Initializable{
     Thread evalThread = new Thread();
 
     public static boolean penDown = true;
+
+    public static Color penColor = Color.BLACK;
 
     public static HashMap<String, Integer> publicVariables = new HashMap<>();
 
@@ -125,6 +128,7 @@ public class Controller implements Initializable{
             connector.setStartY(start.getY());
             connector.setEndX(end.getX());
             connector.setEndY(end.getY());
+            connector.setFill(Controller.penColor);
             canvas.getChildren().add(connector);
         }
     }

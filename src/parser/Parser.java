@@ -50,13 +50,6 @@ public class Parser implements Runnable{
             }
         }
         else if (parseTree.isNamed("expr")) {
-            if (parseTree.hasNamed("assignment")){
-                return interpret(parseTree.getChild(0));
-            }
-
-            else if (parseTree.hasNamed("cmd")){
-                return interpret(parseTree.getChild(0));
-            }
             return interpret(parseTree.getChild(0));
         }
 
@@ -131,6 +124,13 @@ public class Parser implements Runnable{
         return 0;
     }
 
+    public boolean evaluateBooleanExpression(Tree parseTree){
+        //todo: implement
+        if (parseTree.isNamed("boolCond")){
+        }
+        return false;
+    }
+
     public void makeLine(Point2D current, Point2D end){
         if (Controller.isPenDown()) {
             Line line = new Line();
@@ -139,6 +139,7 @@ public class Parser implements Runnable{
             line.setEndX(end.getX());
             line.setEndY(end.getY());
             line.setId("line");
+            line.setFill(Controller.penColor);
             canvasChildren.add(line);
         }
 

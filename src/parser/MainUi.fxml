@@ -8,7 +8,7 @@
    <center>
       <Pane fx:id="canvas" BorderPane.alignment="CENTER">
          <children>
-            <ImageView id="turtle" fx:id="turtleImage" fitHeight="12.0" fitWidth="11.0" layoutX="304.0" layoutY="205.0" rotate="90.0">
+            <ImageView id="turtle" fx:id="turtleImage" fitHeight="28.0" fitWidth="29.0" layoutX="295.0" layoutY="197.0" rotate="90.0">
                <image>
                   <Image url="@di07G.png" />
                </image>
