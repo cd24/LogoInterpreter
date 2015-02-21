@@ -109,13 +109,14 @@ public class Controller implements Initializable{
         if (evalThread.isAlive()){
             evalThread.interrupt();
         }
+        clearScreen();
     }
 
     void updateTurtle(Point2D start, Point2D end){
         createLine(start, end);
 
-        turtleImage.setTranslateY(end.getY() - Turtle.CANVAS_MIDDLE_Y);
-        turtleImage.setTranslateX(end.getX() - Turtle.CANVAS_MIDDLE_X);
+        turtleImage.setTranslateY(end.getY() - Turtle.CENTER_Y);
+        turtleImage.setTranslateX(end.getX() - Turtle.CENTER_X);
         turtleImage.setRotate(turtle.getRotation() + 90);
 
         System.out.println("X, Y: " + end.getX() + ", " + end.getY() + ", " + turtle.getRotation());
@@ -146,6 +147,18 @@ public class Controller implements Initializable{
             issueCommand(singleCommand.getText());
         }
         singleCommand.setText("");
+    }
+
+    @FXML
+    void clearScreen() {
+        for (javafx.scene.Node item : canvas.getChildren()){
+            if (!item.equals(turtleImage)){
+                canvas.getChildren().remove(item);
+            }
+        }
+
+        turtleImage.setTranslateX(0);
+        turtleImage.setTranslateY(0);
     }
 
     public static boolean isPenDown(){

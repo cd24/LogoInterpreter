@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -41,6 +42,20 @@
       </VBox>
    </left>
    <bottom>
-      <TextArea fx:id="editor" maxHeight="200.0" BorderPane.alignment="CENTER" />
+      <HBox prefHeight="181.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER">
+               <children>
+                  <Button mnemonicParsing="false" text="Run">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" text="Interrupt" />
+               </children>
+            </VBox>
+            <TextArea fx:id="editor" maxHeight="200.0" prefHeight="100.0" prefWidth="732.0" />
+         </children>
+      </HBox>
    </bottom>
 </BorderPane>
