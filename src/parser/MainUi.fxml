@@ -32,9 +32,6 @@
                <bottom>
                   <Button fx:id="backward" mnemonicParsing="false" onAction="#moveBackward" text="Backwards" BorderPane.alignment="CENTER" />
                </bottom>
-               <center>
-                  <Button fx:id="reset" mnemonicParsing="false" onAction="#resetBoard" text="Reset" BorderPane.alignment="CENTER" />
-               </center>
             </BorderPane>
             <TextArea fx:id="passedCommands" prefHeight="670.0" prefWidth="154.0" />
             <TextField fx:id="singleCommand" onAction="#giveSingleCommand" />
@@ -46,12 +43,12 @@
          <children>
             <VBox alignment="TOP_CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="Run">
+                  <Button mnemonicParsing="false" onAction="#runScript" text="Run">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Interrupt" />
+                  <Button fx:id="reset" mnemonicParsing="false" text="Interrupt" />
                </children>
             </VBox>
             <TextArea fx:id="editor" maxHeight="200.0" prefHeight="100.0" prefWidth="732.0" />

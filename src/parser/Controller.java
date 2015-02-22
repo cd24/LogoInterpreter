@@ -161,6 +161,14 @@ public class Controller implements Initializable{
         turtleImage.setTranslateY(0);
     }
 
+    @FXML
+    void runScript() {
+        String[] script = editor.getText().split("\n");
+        for (int i = 0; i < script.length; ++i){
+            issueCommand(script[i]);
+        }
+    }
+
     public static boolean isPenDown(){
         return penDown;
     }
