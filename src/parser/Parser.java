@@ -108,8 +108,12 @@ public class Parser implements Runnable{
             int numRepeats = interpret(parseTree.getNamedChild("addSubOp"));
             System.out.println("Called, looping for " + numRepeats + " times!");
             for (int i = 0; i < numRepeats; ++i){
-                interpret(parseTree.getNamedChild("cmd"));
+                interpret(parseTree.getNamedChild("block"));
             }
+        }
+
+        else if (parseTree.isNamed("block")){
+            interpret(parseTree.getNamedChild("expr"));
         }
 
         else if (parseTree.isNamed("cmd")) {
