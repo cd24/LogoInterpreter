@@ -32,27 +32,65 @@
                <bottom>
                   <Button fx:id="backward" mnemonicParsing="false" onAction="#moveBackward" text="Backwards" BorderPane.alignment="CENTER" />
                </bottom>
+               <center>
+                  <Button mnemonicParsing="false" onAction="#clearScreen" text="Clear Screen" BorderPane.alignment="CENTER" />
+               </center>
             </BorderPane>
-            <TextArea fx:id="passedCommands" prefHeight="670.0" prefWidth="154.0" />
-            <TextField fx:id="singleCommand" onAction="#giveSingleCommand" />
+            <TextArea fx:id="passedCommands" prefHeight="670.0" prefWidth="154.0" promptText="Executed Commands" />
+            <TextField fx:id="singleCommand" onAction="#giveSingleCommand" promptText="Single Command" />
          </children>
       </VBox>
    </left>
    <bottom>
-      <HBox prefHeight="181.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="TOP_CENTER">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#runScript" text="Run">
-                     <VBox.margin>
-                        <Insets bottom="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="reset" mnemonicParsing="false" text="Interrupt" />
-               </children>
-            </VBox>
-            <TextArea fx:id="editor" maxHeight="200.0" prefHeight="100.0" prefWidth="732.0" />
-         </children>
-      </HBox>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Editor">
+               <content>
+                  <HBox>
+                     <children>
+                        <VBox alignment="TOP_CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#runScript" text="Run">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="reset" mnemonicParsing="false" text="Interrupt" />
+                           </children>
+                        </VBox>
+                        <TextArea fx:id="editor" maxHeight="200.0" prefHeight="100.0" prefWidth="732.0" promptText="Editor " />
+                     </children>
+                  </HBox>
+               </content>
+          </Tab>
+          <Tab text="Preferences">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Pen Color">
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </Label>
+                              <ColorPicker fx:id="lineColorPicker" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </bottom>
 </BorderPane>

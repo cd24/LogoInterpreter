@@ -63,6 +63,11 @@ public class Turtle {
         return point;
     }
 
+    public void toHome() {
+        this.x = CENTER_X;
+        this.y = CENTER_Y;
+    }
+
     public double getRotation(){
         return Math.toDegrees(this.heading);
     }

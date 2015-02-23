@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -44,6 +46,9 @@ public class Controller implements Initializable{
     @FXML
     ImageView turtleImage;
 
+    @FXML
+    ColorPicker lineColorPicker;
+
     Turtle turtle = Turtle.getInstance();
 
     Thread evalThread = new Thread();
@@ -53,6 +58,8 @@ public class Controller implements Initializable{
     public static Color penColor = Color.BLACK;
 
     public static HashMap<String, Integer> publicVariables = new HashMap<>();
+
+    public static ArrayList<Line> lines = new ArrayList<>();
 
 
     void initialize() {
@@ -82,6 +89,8 @@ public class Controller implements Initializable{
                     break;
             }
         });
+
+        lineColorPicker.setValue(Color.BLACK);
 
         canvas.requestFocus();
         System.out.println("X, Y: " + starting.getX() + " , " + starting.getY());
@@ -131,6 +140,7 @@ public class Controller implements Initializable{
             connector.setEndY(end.getY());
             connector.setFill(Controller.penColor);
             canvas.getChildren().add(connector);
+            lines.add(connector);
         }
     }
 
@@ -151,14 +161,15 @@ public class Controller implements Initializable{
 
     @FXML
     void clearScreen() {
-        for (javafx.scene.Node item : canvas.getChildren()){
-            if (!item.equals(turtleImage)){
-                canvas.getChildren().remove(item);
-            }
+        for (Line line : lines){
+            canvas.getChildren().remove(line);
         }
 
         turtleImage.setTranslateX(0);
         turtleImage.setTranslateY(0);
+        turtleImage.setRotate(90);
+
+        Turtle.getInstance().toHome();
     }
 
     @FXML

@@ -38,6 +38,7 @@ public class Parser implements Runnable{
     }
 
     private int interpret(Tree parseTree) {
+        System.out.println("Tree name: " + parseTree.getName() + ", String value: " + parseTree.toString());
         if (parseTree.isNamed("lines") || parseTree.isNamed("line")){
             return interpret(parseTree.getChild(0));
         }
@@ -45,9 +46,7 @@ public class Parser implements Runnable{
             if (parseTree.hasNamed("variable")){
                 return interpret(parseTree.getChild(0));
             }
-            else {
-                return Integer.parseInt(parseTree.toString());
-            }
+            return Integer.parseInt(parseTree.toString());
         }
         else if (parseTree.isNamed("expr")) {
             return interpret(parseTree.getChild(0));
@@ -93,14 +92,15 @@ public class Parser implements Runnable{
         }
 
         else if (parseTree.isNamed("paren")){
-            if (parseTree.hasNamed("num")){
-                if (parseTree.getNamedChild("num").hasNamed("variable")) {
-                    return interpret(parseTree.getChild(0));
-                }
-                return Integer.parseInt(parseTree.getNamedChild("num").toString());
+            return interpret(parseTree.getChild(0));
+        }
+
+        else if (parseTree.isNamed("num")){
+            if (parseTree.hasNamed("variable")){
+                return interpret(parseTree.getChild(0));
             }
             else {
-                return interpret(parseTree.getChild(0));
+                return Integer.parseInt(parseTree.toString());
             }
         }
 
@@ -121,12 +121,77 @@ public class Parser implements Runnable{
                 handleCommand(parseTree);
             }
         }
+
+        else if (parseTree.isNamed("if")){
+            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolNor"));
+            System.out.println("HERE :)  Evalutating condition to: " + condition);
+            if (condition){
+                interpret(parseTree.getNamedChild("block"));
+            }
+        }
+
+        else if (parseTree.isNamed("ifelse")){
+            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolNor"));
+            if (condition) {
+                interpret(parseTree.getNamedChild("block"));
+            }
+            else {
+                interpret(parseTree.getNamedChild("elseBlock"));
+            }
+        }
         return 0;
     }
+
 
     public boolean evaluateBooleanExpression(Tree parseTree){
         //todo: implement
         if (parseTree.isNamed("boolCond")){
+            int first = interpret(parseTree.getChild(0));
+            int second = interpret(parseTree.getLastChild());
+
+            String comparator = parseTree.getNamedChild("boolOp").toString();
+            System.out.println("First, second, operator " + first + ", " + second + ", " + comparator);
+
+            if (comparator.equals(">")){
+                return first > second;
+            }
+            else if (comparator.equals("<")){
+                return first < second;
+            }
+            else if (comparator.equals(">=")){
+                return first >= second;
+            }
+            else if (comparator.equals("<=")){
+                return first <= second;
+            }
+            else if (comparator.equals("==")){
+                return first == second;
+            }
+        }
+
+        else if (parseTree.isNamed("boolNor")){
+            if (parseTree.getNumChildren() == 1){
+                return evaluateBooleanExpression(parseTree.getChild(0));
+            }
+            else {
+                return !(evaluateBooleanExpression(parseTree.getChild(0)) || evaluateBooleanExpression(parseTree.getLastChild()));
+            }
+        }
+        else if (parseTree.isNamed("boolOr")){
+            if (parseTree.getNumChildren() == 1){
+                return evaluateBooleanExpression(parseTree.getChild(0));
+            }
+            else {
+                return evaluateBooleanExpression(parseTree.getChild(0)) || evaluateBooleanExpression(parseTree.getLastChild());
+            }
+        }
+        else if (parseTree.isNamed("boolAnd")){
+            if (parseTree.getNumChildren() == 1){
+                return evaluateBooleanExpression(parseTree.getChild(0));
+            }
+            else {
+                return evaluateBooleanExpression(parseTree.getChild(0)) && evaluateBooleanExpression(parseTree.getLastChild());
+            }
         }
         return false;
     }
@@ -141,6 +206,7 @@ public class Parser implements Runnable{
             line.setId("line");
             line.setFill(Controller.penColor);
             canvasChildren.add(line);
+            Controller.lines.add(line);
         }
 
         turtleImage.setTranslateX(end.getX() - Turtle.CENTER_X);
@@ -198,11 +264,14 @@ public class Parser implements Runnable{
             turtleImage.setTranslateY(0);
         }
         else if (parseTree.hasNamed("cs")){
-            for (Node item : canvasChildren){
-                if (item.getId() != null && item.getId().equals("line")){
-                    canvasChildren.remove(item);
-                }
+            for (Line line : Controller.lines) {
+                canvasChildren.remove(line);
             }
+            this.turtleImage.setTranslateY(0);
+            this.turtleImage.setTranslateX(0);
+            this.turtleImage.setRotate(90);
+
+            Turtle.getInstance().toHome();
         }
         else if (parseTree.hasNamed("st")){
             turtleImage.setVisible(true);
