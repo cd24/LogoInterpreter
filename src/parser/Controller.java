@@ -4,10 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -48,6 +45,11 @@ public class Controller implements Initializable{
 
     @FXML
     ColorPicker lineColorPicker;
+
+    @FXML
+    Slider turtleScale;
+
+    double turtleScaleX, turtleScaleY;
 
     Turtle turtle = Turtle.getInstance();
 
@@ -92,6 +94,9 @@ public class Controller implements Initializable{
 
         lineColorPicker.setValue(Color.BLACK);
 
+        turtleScaleX = turtleImage.getScaleX()/2;
+        turtleScaleY = turtleImage.getScaleY()/2;
+
         canvas.requestFocus();
         System.out.println("X, Y: " + starting.getX() + " , " + starting.getY());
         System.out.println("Height, Width: " + canvas.getHeight() + " , " + canvas.getWidth());
@@ -121,6 +126,11 @@ public class Controller implements Initializable{
         clearScreen();
     }
 
+    @FXML
+    void changeColor() {
+        Controller.penColor = lineColorPicker.getValue();
+    }
+
     void updateTurtle(Point2D start, Point2D end){
         createLine(start, end);
 
@@ -138,7 +148,7 @@ public class Controller implements Initializable{
             connector.setStartY(start.getY());
             connector.setEndX(end.getX());
             connector.setEndY(end.getY());
-            connector.setFill(Controller.penColor);
+            connector.setStroke(Controller.penColor);
             canvas.getChildren().add(connector);
             lines.add(connector);
         }
@@ -176,7 +186,13 @@ public class Controller implements Initializable{
     void runScript() {
         String script = editor.getText();
         issueCommand(script);
+    }
 
+    @FXML
+    public void changeTurtleScale() {
+        double newScale = turtleScale.getValue();
+        turtleImage.setScaleX(turtleScaleX * newScale);
+        turtleImage.setScaleY(turtleScaleY * newScale);
     }
 
     public static boolean isPenDown(){

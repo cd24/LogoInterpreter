@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Menus added&#10;&#10;Functionality is still being implemented, but the GUI components are there.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Controller.class" afterPath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Controller.class" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Custom Functions Working&#10;&#10;Recursion will be coming soon">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Controller.java" afterPath="$PROJECT_DIR$/src/parser/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/LogoGrammar.java" afterPath="$PROJECT_DIR$/src/parser/LogoGrammar.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/MainUi.fxml" afterPath="$PROJECT_DIR$/src/parser/MainUi.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Parser.java" afterPath="$PROJECT_DIR$/src/parser/Parser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Turtle.java" afterPath="$PROJECT_DIR$/src/parser/Turtle.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -82,18 +82,21 @@
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2822">
-              <caret line="176" column="41" selection-start-line="176" selection-start-column="41" selection-end-line="176" selection-end-column="41" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="3145">
+              <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
+              <folding>
+                <element signature="e#3014#3015#0" expanded="true" />
+                <element signature="e#3078#3079#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Parser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3323442" vertical-offset="2343" max-vertical-offset="6035">
-              <caret line="151" column="91" selection-start-line="151" selection-start-column="91" selection-end-line="151" selection-end-column="91" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="6035">
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -108,11 +111,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Turtle.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Turtle.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1292">
-              <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+            <state vertical-scroll-proportion="1.504451" vertical-offset="108" max-vertical-offset="1309">
+              <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -121,8 +124,8 @@
       <file leaf-file-name="MainUi.fxml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/MainUi.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="2057">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2346">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -154,10 +157,10 @@
         <option value="$PROJECT_DIR$/src/parser/LogoGrammar.java" />
         <option value="$PROJECT_DIR$/src/parser/InterpretException.java" />
         <option value="$PROJECT_DIR$/src/parser/Main.java" />
-        <option value="$PROJECT_DIR$/src/parser/Turtle.java" />
         <option value="$PROJECT_DIR$/src/parser/MainUi.fxml" />
-        <option value="$PROJECT_DIR$/src/parser/Controller.java" />
         <option value="$PROJECT_DIR$/src/parser/Parser.java" />
+        <option value="$PROJECT_DIR$/src/parser/Controller.java" />
+        <option value="$PROJECT_DIR$/src/parser/Turtle.java" />
       </list>
     </option>
   </component>
@@ -507,7 +510,13 @@
       <option name="project" value="LOCAL" />
       <updated>1424707033217</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Custom Functions Working&#10;&#10;Recursion will be coming soon">
+      <created>1425009845610</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1425009845610</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -597,7 +606,8 @@
     <MESSAGE value="Intermediate Check in&#10;&#10;various fixes and alterations." />
     <MESSAGE value="Booleans Added" />
     <MESSAGE value="Menus added&#10;&#10;Functionality is still being implemented, but the GUI components are there." />
-    <option name="LAST_COMMIT_MESSAGE" value="Menus added&#10;&#10;Functionality is still being implemented, but the GUI components are there." />
+    <MESSAGE value="Custom Functions Working&#10;&#10;Recursion will be coming soon" />
+    <option name="LAST_COMMIT_MESSAGE" value="Custom Functions Working&#10;&#10;Recursion will be coming soon" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -642,7 +652,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2177" max-vertical-offset="3128">
           <caret line="156" column="50" selection-start-line="156" selection-start-column="50" selection-end-line="156" selection-end-column="50" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -692,7 +705,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2941">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -742,7 +758,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2941">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -792,7 +811,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2805">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -842,7 +864,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1888" max-vertical-offset="2584">
           <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -892,7 +917,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2414">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -932,7 +960,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1350">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -964,7 +995,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="170">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -994,8 +1028,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/MainUi.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="2057">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2346">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1003,29 +1037,32 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1292">
-          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2148" max-vertical-offset="2822">
-          <caret line="176" column="41" selection-start-line="176" selection-start-column="41" selection-end-line="176" selection-end-column="41" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="3145">
+          <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3323442" vertical-offset="2343" max-vertical-offset="6035">
-          <caret line="151" column="91" selection-start-line="151" selection-start-column="91" selection-end-line="151" selection-end-column="91" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="6035">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.504451" vertical-offset="108" max-vertical-offset="1309">
+          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -66,6 +66,7 @@ public class Turtle {
     public void toHome() {
         this.x = CENTER_X;
         this.y = CENTER_Y;
+        this.heading = 0;
     }
 
     public double getRotation(){

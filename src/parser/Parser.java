@@ -229,7 +229,7 @@ public class Parser implements Runnable{
             line.setStartY(current.getY());
             line.setEndX(end.getX());
             line.setEndY(end.getY());
-            line.setFill(Controller.penColor);
+            line.setStroke(Controller.penColor);
             canvasChildren.add(line);
             Controller.lines.add(line);
         }
