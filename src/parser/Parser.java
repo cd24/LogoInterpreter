@@ -133,8 +133,8 @@ public class Parser implements Runnable{
 
         else if (parseTree.isNamed("functionCall")) {
             if (parseTree.hasNamed("functionCall")){
-                handleCommand(parseTree);
                 interpret(parseTree.getNamedChild("functionCall"));
+                handleCommand(parseTree);
             }
             else {
                 handleCommand(parseTree);
