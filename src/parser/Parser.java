@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -20,6 +21,8 @@ public class Parser implements Runnable{
     private LogoGrammar grammar;
     private Turtle turtle = Turtle.getInstance();
     private HashMap<String, Integer> variables;
+    private HashMap<String, ArrayList<String>> functions;
+    private HashMap<String, Tree> funcVars;
     private ObservableList<Node> canvasChildren;
     private String commands;
 
@@ -28,6 +31,8 @@ public class Parser implements Runnable{
         this.canvasChildren = children;
         grammar = new LogoGrammar();
         variables = new HashMap<>();
+        functions = new HashMap<>();
+        funcVars = new HashMap<>();
         this.commands = commands;
         System.out.println("Command: " + commands);
     }
@@ -39,10 +44,20 @@ public class Parser implements Runnable{
 
     private int interpret(Tree parseTree) {
         System.out.println("Tree name: " + parseTree.getName() + ", String value: " + parseTree.toString());
-        if (parseTree.isNamed("lines") || parseTree.isNamed("line")){
-            return interpret(parseTree.getChild(0));
+        if (parseTree.isNamed("lines")){
+            if (parseTree.getNumChildren() == 1){
+                interpret(parseTree.getChild(0));
+            }
+            else {
+                interpret(parseTree.getNamedChild("lines"));
+                interpret(parseTree.getNamedChild("line"));
+            }
+
         }
-        if (parseTree.isNamed("num")){
+        else if (parseTree.isNamed("line")){
+            interpret(parseTree.getChild(0));
+        }
+        else if (parseTree.isNamed("num")){
             if (parseTree.hasNamed("variable")){
                 return interpret(parseTree.getChild(0));
             }
@@ -113,29 +128,28 @@ public class Parser implements Runnable{
         }
 
         else if (parseTree.isNamed("block")){
-            interpret(parseTree.getNamedChild("expr"));
+            interpret(parseTree.getNamedChild("lines"));
         }
 
-        else if (parseTree.isNamed("cmd")) {
-            if (parseTree.getNumChildren() == 1){
+        else if (parseTree.isNamed("functionCall")) {
+            if (parseTree.hasNamed("functionCall")){
                 handleCommand(parseTree);
+                interpret(parseTree.getNamedChild("functionCall"));
             }
             else {
-                interpret(parseTree.getNamedChild("cmd"));
                 handleCommand(parseTree);
             }
         }
 
         else if (parseTree.isNamed("if")){
             boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolNor"));
-            System.out.println("HERE :)  Evalutating condition to: " + condition);
             if (condition){
                 interpret(parseTree.getNamedChild("block"));
             }
         }
 
         else if (parseTree.isNamed("ifelse")){
-            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolNor"));
+            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolCond"));
             if (condition) {
                 interpret(parseTree.getNamedChild("block"));
             }
@@ -143,6 +157,14 @@ public class Parser implements Runnable{
                 interpret(parseTree.getNamedChild("elseBlock"));
             }
         }
+
+        else if (parseTree.isNamed("functionDecl")){
+            ArrayList<String> variables = setVariableName(parseTree.getNamedChild("funcVars"));
+            String name = parseTree.getNamedChild("fname").toString();
+            functions.put(name, variables);
+            funcVars.put(name, parseTree.getNamedChild("block"));
+        }
+
         return 0;
     }
 
@@ -207,7 +229,6 @@ public class Parser implements Runnable{
             line.setStartY(current.getY());
             line.setEndX(end.getX());
             line.setEndY(end.getY());
-            line.setId("line");
             line.setFill(Controller.penColor);
             canvasChildren.add(line);
             Controller.lines.add(line);
@@ -221,53 +242,50 @@ public class Parser implements Runnable{
     }
 
     public void handleCommand(Tree parseTree){
-        if (parseTree.hasNamed("fd")){
-            parseTree = parseTree.getNamedChild("fd");
-            int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
+        String commandName = parseTree.getNamedChild("fname").toString();
+        if (commandName.equals("fd")){
+            int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.moveForward(moveDist);
 
             makeLine(currentPos, newPos);
         }
-        else if (parseTree.hasNamed("bk")){
-            parseTree = parseTree.getNamedChild("bk");
-            int moveDist = interpret(parseTree.getNamedChild("addSubOp"));
+        else if (commandName.equals("bk")){
+            int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.moveBackward(moveDist);
 
             makeLine(currentPos, newPos);
         }
-        else if (parseTree.hasNamed("lt")){
-            parseTree = parseTree.getNamedChild("lt");
-            int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
+        else if (commandName.equals("lt")){
+            int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.turnLeft(rotateAngle);
 
             makeLine(currentPos, newPos);
         }
-        else if (parseTree.hasNamed("rt")){
-            parseTree = parseTree.getNamedChild("rt");
-            int rotateAngle = interpret(parseTree.getNamedChild("addSubOp"));
+        else if (commandName.equals("rt")){
+            int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.turnRight(rotateAngle);
 
             makeLine(currentPos, newPos);
         }
-        else if (parseTree.hasNamed("pd")){
+        else if (commandName.equals("pd")){
             if (!Controller.isPenDown()){
                 Controller.setPenDown(true);
             }
         }
-        else if (parseTree.hasNamed("pu")){
+        else if (commandName.equals("pu")){
             if (Controller.isPenDown()){
                 Controller.setPenDown(false);
             }
         }
-        else if (parseTree.hasNamed("home")){
+        else if (commandName.equals("home")){
             turtleImage.setTranslateX(0);
             turtleImage.setTranslateY(0);
         }
-        else if (parseTree.hasNamed("cs")){
+        else if (commandName.equals("cs")){
             for (Line line : Controller.lines) {
                 canvasChildren.remove(line);
             }
@@ -277,12 +295,47 @@ public class Parser implements Runnable{
 
             Turtle.getInstance().toHome();
         }
-        else if (parseTree.hasNamed("st")){
+        else if (commandName.equals("st")){
             turtleImage.setVisible(true);
         }
-        else if (parseTree.hasNamed("ht")){
+        else if (commandName.equals("ht")){
             turtleImage.setVisible(false);
         }
+        else {
+            ArrayList<Integer> values = getVarValues(parseTree.getNamedChild("fvars"));
+            String funcName = parseTree.getNamedChild("fname").toString();
+            if (functions.containsKey(funcName)) {
+                ArrayList<String> variables = this.functions.get(funcName);
+                if (values.size() == variables.size()) {
+                    Tree block = funcVars.get(funcName);
+                    for (int i = 0; i < values.size(); ++i) {
+                        this.variables.put(variables.get(i), values.get(i));
+                    }
+                    interpret(block);
+                }
+            }
+
+        }
+    }
+
+    public ArrayList<Integer> getVarValues(Tree tree){
+        ArrayList<Integer> ints = new ArrayList<>();
+        int currVal = interpret(tree.getNamedChild("addSubOp"));
+        ints.add(currVal);
+        if (tree.hasNamed("fvars")){
+            ints.addAll(getVarValues(tree.getNamedChild("fvars")));
+        }
+        return ints;
+    }
+
+    public ArrayList<String> setVariableName(Tree tree){
+        ArrayList<String> variables = new ArrayList<>();
+        variables.add(tree.getNamedChild("variable").toString());
+        if (tree.hasNamed("funcVars")){
+            variables.addAll(setVariableName(tree.getNamedChild("funcVars")));
+        }
+
+        return variables;
     }
 
     public void run(){

@@ -174,10 +174,9 @@ public class Controller implements Initializable{
 
     @FXML
     void runScript() {
-        String[] script = editor.getText().split("\n");
-        for (int i = 0; i < script.length; ++i){
-            issueCommand(script[i]);
-        }
+        String script = editor.getText();
+        issueCommand(script);
+
     }
 
     public static boolean isPenDown(){
