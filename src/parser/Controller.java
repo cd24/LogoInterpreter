@@ -1,16 +1,28 @@
 package parser;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +60,10 @@ public class Controller implements Initializable{
 
     @FXML
     Slider turtleScale;
+    @FXML
+    Slider buttonRotation;
+    @FXML
+    Slider buttonDistance;
 
     double turtleScaleX, turtleScaleY;
 
@@ -62,6 +78,8 @@ public class Controller implements Initializable{
     public static HashMap<String, Integer> publicVariables = new HashMap<>();
 
     public static ArrayList<Line> lines = new ArrayList<>();
+
+    public FileManager manager;
 
 
     void initialize() {
@@ -97,6 +115,8 @@ public class Controller implements Initializable{
         turtleScaleX = turtleImage.getScaleX()/2;
         turtleScaleY = turtleImage.getScaleY()/2;
 
+        manager = new FileManager(passedCommands.getScene());
+
         canvas.requestFocus();
         System.out.println("X, Y: " + starting.getX() + " , " + starting.getY());
         System.out.println("Height, Width: " + canvas.getHeight() + " , " + canvas.getWidth());
@@ -104,19 +124,19 @@ public class Controller implements Initializable{
 
     @FXML
     void moveForward() {
-        this.updateTurtle(turtle.asPoint(), turtle.moveForward(10));
+        this.updateTurtle(turtle.asPoint(), turtle.moveForward(buttonDistance.getValue()));
     }
     @FXML
     void moveLeft() {
-        this.updateTurtle(turtle.asPoint(), turtle.turnLeft(45));
+        this.updateTurtle(turtle.asPoint(), turtle.turnLeft(buttonRotation.getValue()));
     }
     @FXML
     void moveRight() {
-        this.updateTurtle(turtle.asPoint(), turtle.turnRight(45));
+        this.updateTurtle(turtle.asPoint(), turtle.turnRight(buttonRotation.getValue()));
     }
     @FXML
     void moveBackward() {
-        this.updateTurtle(turtle.asPoint(), turtle.moveBackward(10));
+        this.updateTurtle(turtle.asPoint(), turtle.moveBackward(buttonDistance.getValue()));
     }
     @FXML
     void resetBoard() {
@@ -193,6 +213,53 @@ public class Controller implements Initializable{
         double newScale = turtleScale.getValue();
         turtleImage.setScaleX(turtleScaleX * newScale);
         turtleImage.setScaleY(turtleScaleY * newScale);
+    }
+
+    @FXML
+    void resetDefaultSettings() {
+        this.turtleScale.setValue(0.5);
+        this.buttonDistance.setValue(10);
+        this.buttonRotation.setValue(45);
+        this.lineColorPicker.setValue(Color.BLACK);
+    }
+
+    @FXML
+    void saveToFile() {
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+        File path = fc.showSaveDialog(turtleImage.getScene().getWindow());
+        manager.writeToFile(path, editor.getText());
+    }
+
+    @FXML
+    void readFromFile(){
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+        File path = fc.showOpenDialog(turtleImage.getScene().getWindow());
+        String text = manager.readFromFile(path);
+        if (text.length() > 0){
+            editor.setText(text);
+        }
+    }
+
+    @FXML
+    void saveToImage() {
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("JPEG Image", "*.jpeg"));
+        File path = fc.showSaveDialog(turtleImage.getScene().getWindow());
+        turtleImage.setVisible(false);
+        try {
+            WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
+            BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
+            BufferedImage rgbvals = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.OPAQUE);
+            Graphics2D graphics2D = rgbvals.createGraphics();
+            graphics2D.drawImage(bi, 0, 0, null);
+            ImageIO.write(rgbvals, "jpeg", path);
+            graphics2D.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        turtleImage.setVisible(true);
     }
 
     public static boolean isPenDown(){
