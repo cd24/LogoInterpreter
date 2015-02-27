@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Custom Functions Working&#10;&#10;Recursion will be coming soon">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Controller.java" afterPath="$PROJECT_DIR$/src/parser/Controller.java" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Fixes&#10;&#10;Fixed an issue where the turtle would randomly change heading">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Controller.class" afterPath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Controller.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Turtle.class" afterPath="$PROJECT_DIR$/out/production/LoGo_Interpretor/parser/Turtle.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/MainUi.fxml" afterPath="$PROJECT_DIR$/src/parser/MainUi.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Parser.java" afterPath="$PROJECT_DIR$/src/parser/Parser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/parser/Turtle.java" afterPath="$PROJECT_DIR$/src/parser/Turtle.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -72,18 +71,18 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="391">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
               <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/parser/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="3145">
-              <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.5207715" vertical-offset="2471" max-vertical-offset="3145">
+              <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
               <folding>
                 <element signature="e#3014#3015#0" expanded="true" />
                 <element signature="e#3078#3079#0" expanded="true" />
@@ -95,7 +94,7 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="6035">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3567" max-vertical-offset="6035">
               <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -111,10 +110,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Turtle.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Turtle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.504451" vertical-offset="108" max-vertical-offset="1309">
+            <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="1309">
               <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
               <folding />
             </state>
@@ -124,8 +123,8 @@
       <file leaf-file-name="MainUi.fxml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/parser/MainUi.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2346">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.0" vertical-offset="85" max-vertical-offset="2788">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -516,7 +515,13 @@
       <option name="project" value="LOCAL" />
       <updated>1425009845610</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fixes&#10;&#10;Fixed an issue where the turtle would randomly change heading">
+      <created>1425011479201</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1425011479201</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -607,7 +612,8 @@
     <MESSAGE value="Booleans Added" />
     <MESSAGE value="Menus added&#10;&#10;Functionality is still being implemented, but the GUI components are there." />
     <MESSAGE value="Custom Functions Working&#10;&#10;Recursion will be coming soon" />
-    <option name="LAST_COMMIT_MESSAGE" value="Custom Functions Working&#10;&#10;Recursion will be coming soon" />
+    <MESSAGE value="Fixes&#10;&#10;Fixed an issue where the turtle would randomly change heading" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes&#10;&#10;Fixed an issue where the turtle would randomly change heading" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1018,18 +1024,18 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="1309">
+          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/parser/MainUi.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2346">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state vertical-scroll-proportion="-0.0" vertical-offset="85" max-vertical-offset="2788">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1037,14 +1043,11 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser/Controller.java">
+    <entry file="file://$PROJECT_DIR$/src/parser/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1434" max-vertical-offset="3145">
-          <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
-          <folding>
-            <element signature="e#3014#3015#0" expanded="true" />
-            <element signature="e#3078#3079#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1058,11 +1061,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/parser/Turtle.java">
+    <entry file="file://$PROJECT_DIR$/src/parser/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.504451" vertical-offset="108" max-vertical-offset="1309">
-          <caret line="68" column="25" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
-          <folding />
+        <state vertical-scroll-proportion="0.5207715" vertical-offset="2471" max-vertical-offset="3145">
+          <caret line="188" column="5" selection-start-line="188" selection-start-column="5" selection-end-line="188" selection-end-column="5" />
+          <folding>
+            <element signature="e#3014#3015#0" expanded="true" />
+            <element signature="e#3078#3079#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
