@@ -11,6 +11,7 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * Created by John McAvey on 2/19/2015.
@@ -22,9 +23,11 @@ public class Parser implements Runnable{
     private Turtle turtle = Turtle.getInstance();
     private HashMap<String, Integer> variables;
     private HashMap<String, ArrayList<String>> functions;
-    private HashMap<String, Tree> funcVars;
+    private HashMap<String, Tree> functionBlocks;
     private ObservableList<Node> canvasChildren;
     private String commands;
+    private Stack<HashMap<String, Integer>> variableStack;
+    public Controller parent;
 
     public Parser(ImageView turtle, ObservableList<Node> children, String commands){
         this.turtleImage = turtle;
@@ -32,8 +35,9 @@ public class Parser implements Runnable{
         grammar = new LogoGrammar();
         variables = new HashMap<>();
         functions = new HashMap<>();
-        funcVars = new HashMap<>();
+        functionBlocks = new HashMap<>();
         this.commands = commands;
+        this.variableStack = new Stack<>();
         System.out.println("Command: " + commands);
     }
 
@@ -43,7 +47,6 @@ public class Parser implements Runnable{
     }
 
     private int interpret(Tree parseTree) {
-        System.out.println("Tree name: " + parseTree.getName() + ", String value: " + parseTree.toString());
         if (parseTree.isNamed("lines")){
             if (parseTree.getNumChildren() == 1){
                 interpret(parseTree.getChild(0));
@@ -84,8 +87,13 @@ public class Parser implements Runnable{
         }
 
         else if (parseTree.isNamed("addSubOp")){
-            if (parseTree.getNumChildren() > 1){
-                return interpret(parseTree.getChild(0)) + interpret(parseTree.getLastChild());
+            if (parseTree.hasNamed("addSubD")){
+                if (parseTree.getNamedChild("addSubD").toString().equals("+")) {
+                    return interpret(parseTree.getChild(0)) + interpret(parseTree.getNamedChild("multDivOp"));
+                }
+                else if (parseTree.getNamedChild("addSubD").toString().equals("-")){
+                    return interpret(parseTree.getChild(0)) - interpret(parseTree.getNamedChild("multDivOp"));
+                }
             }
             else {
                 return interpret(parseTree.getChild(0));
@@ -107,7 +115,12 @@ public class Parser implements Runnable{
         }
 
         else if (parseTree.isNamed("paren")){
-            return interpret(parseTree.getChild(0));
+            if (parseTree.hasNamed("num")) {
+                return interpret(parseTree.getNamedChild("num"));
+            }
+            else {
+                return interpret(parseTree.getChild(0));
+            }
         }
 
         else if (parseTree.isNamed("num")){
@@ -132,6 +145,7 @@ public class Parser implements Runnable{
         }
 
         else if (parseTree.isNamed("functionCall")) {
+            variableStack.push(variables);
             if (parseTree.hasNamed("functionCall")){
                 interpret(parseTree.getNamedChild("functionCall"));
                 handleCommand(parseTree);
@@ -139,6 +153,7 @@ public class Parser implements Runnable{
             else {
                 handleCommand(parseTree);
             }
+            variables = variableStack.pop();
         }
 
         else if (parseTree.isNamed("if")){
@@ -162,7 +177,7 @@ public class Parser implements Runnable{
             ArrayList<String> variables = setVariableName(parseTree.getNamedChild("funcVars"));
             String name = parseTree.getNamedChild("fname").toString();
             functions.put(name, variables);
-            funcVars.put(name, parseTree.getNamedChild("block"));
+            functionBlocks.put(name, parseTree.getNamedChild("block"));
         }
 
         return 0;
@@ -243,40 +258,40 @@ public class Parser implements Runnable{
 
     public void handleCommand(Tree parseTree){
         String commandName = parseTree.getNamedChild("fname").toString();
-        if (commandName.equals("fd")){
+        if (commandName.equals("fd") || commandName.equals("forward")){
             int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.moveForward(moveDist);
 
             makeLine(currentPos, newPos);
         }
-        else if (commandName.equals("bk")){
+        else if (commandName.equals("bk") || commandName.equals("backward")){
             int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.moveBackward(moveDist);
 
             makeLine(currentPos, newPos);
         }
-        else if (commandName.equals("lt")){
+        else if (commandName.equals("lt") || commandName.equals("left")){
             int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.turnLeft(rotateAngle);
 
             makeLine(currentPos, newPos);
         }
-        else if (commandName.equals("rt")){
+        else if (commandName.equals("rt") || commandName.equals("right")){
             int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
             Point2D currentPos = turtle.asPoint();
             Point2D newPos = turtle.turnRight(rotateAngle);
 
             makeLine(currentPos, newPos);
         }
-        else if (commandName.equals("pd")){
+        else if (commandName.equals("pd") || commandName.equals("pendown")){
             if (!Controller.isPenDown()){
                 Controller.setPenDown(true);
             }
         }
-        else if (commandName.equals("pu")){
+        else if (commandName.equals("pu") ||  commandName.equals("penup")){
             if (Controller.isPenDown()){
                 Controller.setPenDown(false);
             }
@@ -285,7 +300,7 @@ public class Parser implements Runnable{
             turtleImage.setTranslateX(0);
             turtleImage.setTranslateY(0);
         }
-        else if (commandName.equals("cs")){
+        else if (commandName.equals("cs") || commandName.equals("clearscreen")){
             for (Line line : Controller.lines) {
                 canvasChildren.remove(line);
             }
@@ -295,20 +310,20 @@ public class Parser implements Runnable{
 
             Turtle.getInstance().toHome();
         }
-        else if (commandName.equals("st")){
+        else if (commandName.equals("st") || commandName.equals("showturte")){
             turtleImage.setVisible(true);
         }
-        else if (commandName.equals("ht")){
+        else if (commandName.equals("ht") || commandName.equals("hideturtle")){
             turtleImage.setVisible(false);
         }
         else {
             ArrayList<Integer> values = getVarValues(parseTree.getNamedChild("fvars"));
-            String funcName = parseTree.getNamedChild("fname").toString();
-            if (functions.containsKey(funcName)) {
-                ArrayList<String> variables = this.functions.get(funcName);
+            if (functions.containsKey(commandName)) {
+                ArrayList<String> variables = this.functions.get(commandName);
                 if (values.size() == variables.size()) {
-                    Tree block = funcVars.get(funcName);
+                    Tree block = functionBlocks.get(commandName);
                     for (int i = 0; i < values.size(); ++i) {
+                        System.out.println("VariableName: " + variables.get(i) + ", Value: " + values.get(i));
                         this.variables.put(variables.get(i), values.get(i));
                     }
                     interpret(block);
@@ -342,7 +357,10 @@ public class Parser implements Runnable{
         try {
             parse();
         } catch (ParseException e) {
-            //ToDo: get information back to the user... somehow.
+            if (parent != null){
+                parent.showError(e.toString());
+            }
+            System.out.println("HERE");
             e.printStackTrace();
         }
     }

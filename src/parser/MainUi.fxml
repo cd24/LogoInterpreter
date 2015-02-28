@@ -17,7 +17,7 @@
          </children></Pane>
    </center>
    <left>
-      <VBox prefHeight="722.0" prefWidth="182.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="371.0" prefWidth="201.0" BorderPane.alignment="CENTER">
          <children>
             <BorderPane>
                <left>
@@ -42,7 +42,7 @@
       </VBox>
    </left>
    <bottom>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabs" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Editor">
                <content>
@@ -128,6 +128,15 @@
                   </GridPane>
                </content>
           </Tab>
+            <Tab text="Errors">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="errors" layoutX="4.0" layoutY="3.0" prefHeight="162.0" prefWidth="793.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </bottom>

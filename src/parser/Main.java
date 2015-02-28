@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("MainUi.fxml"));
         primaryStage.setTitle("McAvey Logo Parser");
         primaryStage.setScene(new Scene(root, 800, 600));
-        primaryStage.getIcons().add(new Image("file:di07G.png"));
+        primaryStage.getIcons().add(new Image("file:/parser/di07G.png"));
         primaryStage.show();
     }
 

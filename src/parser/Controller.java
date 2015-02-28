@@ -41,6 +41,8 @@ public class Controller implements Initializable{
     Button right;
     @FXML
     Button reset;
+    @FXML
+    TabPane tabs;
 
     @FXML
     TextField singleCommand;
@@ -48,6 +50,8 @@ public class Controller implements Initializable{
     TextArea passedCommands;
     @FXML
     TextArea editor;
+    @FXML
+    TextArea errors;
 
     @FXML
     Pane canvas;
@@ -261,6 +265,17 @@ public class Controller implements Initializable{
         }
         turtleImage.setVisible(true);
     }
+
+    @FXML
+    void interruptThread() {
+
+    }
+
+    public void showError(String error){
+        errors.appendText(error);
+        passedCommands.appendText(error);
+    }
+
 
     public static boolean isPenDown(){
         return penDown;
