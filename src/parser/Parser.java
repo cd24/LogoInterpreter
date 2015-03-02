@@ -185,7 +185,6 @@ public class Parser implements Runnable{
 
 
     public boolean evaluateBooleanExpression(Tree parseTree){
-        //todo: implement
         if (parseTree.isNamed("boolCond")){
             int first = interpret(parseTree.getChild(0));
             int second = interpret(parseTree.getLastChild());
@@ -259,32 +258,57 @@ public class Parser implements Runnable{
     public void handleCommand(Tree parseTree){
         String commandName = parseTree.getNamedChild("fname").toString();
         if (commandName.equals("fd") || commandName.equals("forward")){
-            int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
-            Point2D currentPos = turtle.asPoint();
-            Point2D newPos = turtle.moveForward(moveDist);
+            if (parseTree.hasNamed("fvars")){
+                ArrayList<Integer> moves = getVarValues(parseTree.getNamedChild("fvars"));
+                int moveDist = moves.get(0);
+                Point2D currentPos = turtle.asPoint();
+                Point2D newPos = turtle.moveForward(moveDist);
 
-            makeLine(currentPos, newPos);
+                makeLine(currentPos, newPos);
+            }
+            else {
+                parent.showError(commandName + " requires an argument, none provided");
+            }
+
         }
         else if (commandName.equals("bk") || commandName.equals("backward")){
-            int moveDist = getVarValues(parseTree.getNamedChild("fvars")).get(0);
-            Point2D currentPos = turtle.asPoint();
-            Point2D newPos = turtle.moveBackward(moveDist);
+            if (parseTree.hasNamed("fvars")){
+                ArrayList<Integer> moves = getVarValues(parseTree.getNamedChild("fvars"));
+                int moveDist = moves.get(0);
+                Point2D currentPos = turtle.asPoint();
+                Point2D newPos = turtle.moveBackward(moveDist);
 
-            makeLine(currentPos, newPos);
+                makeLine(currentPos, newPos);
+            }
+            else {
+                parent.showError(commandName + " requires an argument, none provided");
+            }
         }
         else if (commandName.equals("lt") || commandName.equals("left")){
-            int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
-            Point2D currentPos = turtle.asPoint();
-            Point2D newPos = turtle.turnLeft(rotateAngle);
+            if (parseTree.hasNamed("fvars")) {
+                ArrayList<Integer> moves = getVarValues(parseTree.getNamedChild("fvars"));
+                int rotateAngle = moves.get(0);
+                Point2D currentPos = turtle.asPoint();
+                Point2D newPos = turtle.turnLeft(rotateAngle);
 
-            makeLine(currentPos, newPos);
+                makeLine(currentPos, newPos);
+            }
+            else {
+                parent.showError(commandName + " requires an argument, none provided");
+            }
         }
         else if (commandName.equals("rt") || commandName.equals("right")){
-            int rotateAngle = getVarValues(parseTree.getNamedChild("fvars")).get(0);
-            Point2D currentPos = turtle.asPoint();
-            Point2D newPos = turtle.turnRight(rotateAngle);
+            if (parseTree.hasNamed("fvars")) {
+                ArrayList<Integer> moves = getVarValues(parseTree.getNamedChild("fvars"));
+                int rotateAngle = moves.get(0);
+                Point2D currentPos = turtle.asPoint();
+                Point2D newPos = turtle.turnRight(rotateAngle);
 
-            makeLine(currentPos, newPos);
+                makeLine(currentPos, newPos);
+            }
+            else {
+                parent.showError(commandName + " requires an argument, none provided");
+            }
         }
         else if (commandName.equals("pd") || commandName.equals("pendown")){
             if (!Controller.isPenDown()){
@@ -310,7 +334,7 @@ public class Parser implements Runnable{
 
             Turtle.getInstance().toHome();
         }
-        else if (commandName.equals("st") || commandName.equals("showturte")){
+        else if (commandName.equals("st") || commandName.equals("showturtle")){
             turtleImage.setVisible(true);
         }
         else if (commandName.equals("ht") || commandName.equals("hideturtle")){
@@ -360,8 +384,9 @@ public class Parser implements Runnable{
             if (parent != null){
                 parent.showError(e.toString());
             }
-            System.out.println("HERE");
-            e.printStackTrace();
+            else {
+                e.printStackTrace();
+            }
         }
     }
 }

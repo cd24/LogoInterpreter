@@ -181,6 +181,7 @@ public class Controller implements Initializable{
     @FXML
     void issueCommand(String command){
         Parser parser = new Parser(turtleImage, canvas.getChildren(), command.toLowerCase()); //lower for case-insensitive
+        parser.parent = this;
         Platform.runLater(parser);
         passedCommands.appendText(command + "\n");
     }
@@ -268,14 +269,25 @@ public class Controller implements Initializable{
 
     @FXML
     void interruptThread() {
-
+        //todo: thread, then allow interrupting.
     }
 
     public void showError(String error){
-        errors.appendText(error);
-        passedCommands.appendText(error);
+        errors.appendText(error + "\n");
+        tabs.getSelectionModel().selectLast();
     }
 
+    public String loadHelp(){
+        URL pathToHelp = getClass().getResource("turtleInstructions.txt");
+        File helpFile = new File(pathToHelp.getPath());
+        String help = manager.readFromFile(helpFile);
+        return help;
+    }
+
+    public void showHelp(){
+        //todo: make modal
+        showError(loadHelp());
+    }
 
     public static boolean isPenDown(){
         return penDown;
