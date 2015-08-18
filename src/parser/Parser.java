@@ -21,24 +21,20 @@ public class Parser implements Runnable{
     private ImageView turtleImage;
     private LogoGrammar grammar;
     private Turtle turtle = Turtle.getInstance();
-    private HashMap<String, Integer> variables;
-    private HashMap<String, ArrayList<String>> functions;
-    private HashMap<String, Tree> functionBlocks;
+    private static HashMap<String, Integer> variables = new HashMap<>();
+    private static HashMap<String, ArrayList<String>> functions = new HashMap<>();
+    private static HashMap<String, Tree> functionBlocks = new HashMap<>();
     private ObservableList<Node> canvasChildren;
     private String commands;
-    private Stack<HashMap<String, Integer>> variableStack;
+    private static Stack<HashMap<String, Integer>> variableStack = new Stack<>();
     public Controller parent;
     public static boolean debugging = true;
 
     public Parser(ImageView turtle, ObservableList<Node> children, String commands){
         this.turtleImage = turtle;
         this.canvasChildren = children;
-        grammar = new LogoGrammar();
-        variables = new HashMap<>();
-        functions = new HashMap<>();
-        functionBlocks = new HashMap<>();
+        this.grammar = new LogoGrammar();
         this.commands = commands;
-        this.variableStack = new Stack<>();
         System.out.println("Command: " + commands);
     }
 
@@ -260,7 +256,11 @@ public class Parser implements Runnable{
             turtleImage.setVisible(false);
         }
         else {
-
+            String functionName = parseTree.getNamedChild("fname").toString();
+            ArrayList<Integer> variables = parseTree.hasNamed("fvars") ?
+                    getVarValues(parseTree.getNamedChild("fvars")) :
+                    new ArrayList<>();
+            customFunctionCall(functionName, variables);
         }
     }
 
@@ -276,7 +276,9 @@ public class Parser implements Runnable{
 
     public ArrayList<String> setVariableName(Tree tree){
         ArrayList<String> variables = new ArrayList<>();
-        variables.add(tree.getNamedChild("variable").toString());
+        String variableName = tree.getNamedChild("variable").toString();
+        variables.add(variableName);
+        log ("\t Setting function variable name: " + variableName);
         if (tree.hasNamed("funcVars")){
             variables.addAll(setVariableName(tree.getNamedChild("funcVars")));
         }
@@ -359,13 +361,9 @@ public class Parser implements Runnable{
             interpret(function.getNamedChild("functionCall"));
             handleCommand(function);
         }
-        ArrayList vars = getVarValues(function.getNamedChild("fvars"));
-        log("Calling function: " + function.getNamedChild("fname").toString() + " with " + vars.size() + " variables");
-        for (Object var : vars){
-            log("\t" + var.toString());
+        else {
+            handleCommand(function);
         }
-        handleCommand(function);
-        variables = variableStack.pop();
     }
 
     private void evaluateBoolean(Tree boolExpr){
@@ -384,6 +382,7 @@ public class Parser implements Runnable{
         ArrayList<String> variables = setVariableName(func.getNamedChild("funcVars"));
         functions.put(functionName, variables);
         functionBlocks.put(functionName, func.getNamedChild("block"));
+        log("Function " + functionName + " declared");
     }
 
     private int processStatement(Tree statement){
@@ -398,10 +397,11 @@ public class Parser implements Runnable{
     private void customFunctionCall(String name, ArrayList<Integer> values){
         if (functions.containsKey(name)) {
             ArrayList<String> variables = this.functions.get(name);
+            Tree block = functionBlocks.get(name);
+            log("Function block for function (" + name + ")" + ": " + block);
             if (values.size() == variables.size()) {
-                Tree block = functionBlocks.get(name);
                 for (int i = 0; i < values.size(); ++i) {
-                    System.out.println("VariableName: " + variables.get(i) + ", Value: " + values.get(i));
+                    log("storing Variable: " + variables.get(i) + ", Value: " + values.get(i) + " in function context: " + name);
                     this.variables.put(variables.get(i), values.get(i));
                 }
                 interpret(block);

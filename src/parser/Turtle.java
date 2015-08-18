@@ -2,6 +2,10 @@ package parser;
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
+
+import java.awt.*;
+
 
 public class Turtle {
 
@@ -9,6 +13,9 @@ public class Turtle {
     public static boolean penDown = true;
     private static Turtle ourInstance = new Turtle();
     private double heading, x, y;
+    private ImageView representation;
+    private double sliceSize = 10;
+    private double sliceTimeLength = 100;
 
     public static Turtle getInstance() {
         return ourInstance;
@@ -18,6 +25,10 @@ public class Turtle {
         heading = 0;
         x = 0;
         y = 0;
+    }
+
+    public void setTurtleImage(ImageView turtle){
+        this.representation = turtle;
     }
 
     public static boolean isPenDown(){
@@ -73,6 +84,20 @@ public class Turtle {
         this.x = CENTER_X;
         this.y = CENTER_Y;
         this.heading = 0;
+    }
+
+    public void moveTo(double x, double y, double duration){
+        //animated move
+        //calculate distance
+    }
+
+    public void updateTurtle(){
+        if (this.representation == null){
+            return;
+        }
+
+        this.representation.setX(this.x);
+        this.representation.setY(this.y);
     }
 
     public double getRotation(){
