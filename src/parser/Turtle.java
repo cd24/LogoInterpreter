@@ -3,12 +3,10 @@ package parser;
 
 import javafx.geometry.Point2D;
 
-/**
- * Created by John McAvey on 2/18/2015.
- */
 public class Turtle {
 
     public static final double CENTER_X = 309.0, CENTER_Y = 215.0;
+    public static boolean penDown = true;
     private static Turtle ourInstance = new Turtle();
     private double heading, x, y;
 
@@ -20,6 +18,14 @@ public class Turtle {
         heading = 0;
         x = 0;
         y = 0;
+    }
+
+    public static boolean isPenDown(){
+        return penDown;
+    }
+
+    public static void setPenDown(boolean down){
+        penDown = down;
     }
 
     public Point2D updateForCanvasSized(double height, double width){

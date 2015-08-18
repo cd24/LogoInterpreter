@@ -28,6 +28,7 @@ public class Parser implements Runnable{
     private String commands;
     private Stack<HashMap<String, Integer>> variableStack;
     public Controller parent;
+    public static boolean debugging = true;
 
     public Parser(ImageView turtle, ObservableList<Node> children, String commands){
         this.turtleImage = turtle;
@@ -55,131 +56,49 @@ public class Parser implements Runnable{
                 interpret(parseTree.getNamedChild("lines"));
                 interpret(parseTree.getNamedChild("line"));
             }
-
         }
         else if (parseTree.isNamed("line")){
-            interpret(parseTree.getChild(0));
+            return interpret(parseTree.getChild(0));
         }
         else if (parseTree.isNamed("num")){
-            if (parseTree.hasNamed("variable")){
-                return interpret(parseTree.getChild(0));
-            }
-            return Integer.parseInt(parseTree.toString());
+            return parseNum(parseTree);
         }
         else if (parseTree.isNamed("expr")) {
             return interpret(parseTree.getChild(0));
         }
-
         else if (parseTree.isNamed("assignment")){
-            String variableName = parseTree.getNamedChild("variable").toString();
-            Integer value = interpret(parseTree.getNamedChild("addSubOp"));
-            variables.put(variableName, value);
-            Controller.publicVariables.put(variableName, value);
+            handleAssignment(parseTree);
         }
-
         else if (parseTree.isNamed("variable")) {
-            if (variables.containsKey(parseTree.toString())){
-                return variables.get(parseTree.toString());
-            }
-            else if (Controller.publicVariables.containsKey(parseTree.toString())){
-                return Controller.publicVariables.get(parseTree.toString());
-            }
+            return getVariable(parseTree);
         }
-
         else if (parseTree.isNamed("addSubOp")){
-            if (parseTree.hasNamed("addSubD")){
-                if (parseTree.getNamedChild("addSubD").toString().equals("+")) {
-                    return interpret(parseTree.getChild(0)) + interpret(parseTree.getNamedChild("multDivOp"));
-                }
-                else if (parseTree.getNamedChild("addSubD").toString().equals("-")){
-                    return interpret(parseTree.getChild(0)) - interpret(parseTree.getNamedChild("multDivOp"));
-                }
-            }
-            else {
-                return interpret(parseTree.getChild(0));
-            }
+            return performAdd(parseTree);
         }
-
         else if (parseTree.isNamed("multDivOp")){
-            if (parseTree.getNumChildren() > 1){
-                if (parseTree.getNamedChild("multDivD").toString().equals("*")){
-                    return interpret(parseTree.getChild(0)) * interpret(parseTree.getLastChild());
-                }
-                else {
-                    return interpret(parseTree.getChild(0)) / interpret(parseTree.getLastChild());
-                }
-            }
-            else {
-                return interpret(parseTree.getChild(0));
-            }
+            return performMultiply(parseTree);
         }
-
         else if (parseTree.isNamed("paren")){
-            if (parseTree.hasNamed("num")) {
-                return interpret(parseTree.getNamedChild("num"));
-            }
-            else {
-                return interpret(parseTree.getChild(0));
-            }
+            return processStatement(parseTree);
         }
-
         else if (parseTree.isNamed("num")){
-            if (parseTree.hasNamed("variable")){
-                return interpret(parseTree.getChild(0));
-            }
-            else {
-                return Integer.parseInt(parseTree.toString());
-            }
+            return getNum(parseTree);
         }
-
         else if (parseTree.isNamed("loop")){
-            int numRepeats = interpret(parseTree.getNamedChild("addSubOp"));
-            System.out.println("Called, looping for " + numRepeats + " times!");
-            for (int i = 0; i < numRepeats; ++i){
-                interpret(parseTree.getNamedChild("block"));
-            }
+            evaluateLoop(parseTree);
         }
-
         else if (parseTree.isNamed("block")){
             interpret(parseTree.getNamedChild("lines"));
         }
-
         else if (parseTree.isNamed("functionCall")) {
-            variableStack.push(variables);
-            if (parseTree.hasNamed("functionCall")){
-                interpret(parseTree.getNamedChild("functionCall"));
-                handleCommand(parseTree);
-            }
-            else {
-                handleCommand(parseTree);
-            }
-            variables = variableStack.pop();
+            callFunction(parseTree);
         }
-
-        else if (parseTree.isNamed("if")){
-            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolNor"));
-            if (condition){
-                interpret(parseTree.getNamedChild("block"));
-            }
+        else if (parseTree.isNamed("if") || parseTree.isNamed("ifelse")){
+            evaluateBoolean(parseTree);
         }
-
-        else if (parseTree.isNamed("ifelse")){
-            boolean condition = evaluateBooleanExpression(parseTree.getNamedChild("boolCond"));
-            if (condition) {
-                interpret(parseTree.getNamedChild("block"));
-            }
-            else {
-                interpret(parseTree.getNamedChild("elseBlock"));
-            }
-        }
-
         else if (parseTree.isNamed("functionDecl")){
-            ArrayList<String> variables = setVariableName(parseTree.getNamedChild("funcVars"));
-            String name = parseTree.getNamedChild("fname").toString();
-            functions.put(name, variables);
-            functionBlocks.put(name, parseTree.getNamedChild("block"));
+            declareFunction(parseTree);
         }
-
         return 0;
     }
 
@@ -237,7 +156,7 @@ public class Parser implements Runnable{
     }
 
     public void makeLine(Point2D current, Point2D end){
-        if (Controller.isPenDown()) {
+        if (Turtle.isPenDown()) {
             Line line = new Line();
             line.setStartX(current.getX());
             line.setStartY(current.getY());
@@ -311,13 +230,13 @@ public class Parser implements Runnable{
             }
         }
         else if (commandName.equals("pd") || commandName.equals("pendown")){
-            if (!Controller.isPenDown()){
-                Controller.setPenDown(true);
+            if (!Turtle.isPenDown()){
+                Turtle.setPenDown(true);
             }
         }
         else if (commandName.equals("pu") ||  commandName.equals("penup")){
-            if (Controller.isPenDown()){
-                Controller.setPenDown(false);
+            if (Turtle.isPenDown()){
+                Turtle.setPenDown(false);
             }
         }
         else if (commandName.equals("home")){
@@ -341,18 +260,6 @@ public class Parser implements Runnable{
             turtleImage.setVisible(false);
         }
         else {
-            ArrayList<Integer> values = getVarValues(parseTree.getNamedChild("fvars"));
-            if (functions.containsKey(commandName)) {
-                ArrayList<String> variables = this.functions.get(commandName);
-                if (values.size() == variables.size()) {
-                    Tree block = functionBlocks.get(commandName);
-                    for (int i = 0; i < values.size(); ++i) {
-                        System.out.println("VariableName: " + variables.get(i) + ", Value: " + values.get(i));
-                        this.variables.put(variables.get(i), values.get(i));
-                    }
-                    interpret(block);
-                }
-            }
 
         }
     }
@@ -375,6 +282,142 @@ public class Parser implements Runnable{
         }
 
         return variables;
+    }
+
+    private int getVariable(Tree varTree){
+        if (variables.containsKey(varTree.toString())){
+            return variables.get(varTree.toString());
+        }
+        if (Controller.publicVariables.containsKey(varTree.toString())){
+            return Controller.publicVariables.get(varTree.toString());
+        }
+        return 0;
+    }
+
+    private int parseNum(Tree numTree){
+        if (numTree.hasNamed("variable")){
+            return interpret(numTree.getChild(0));
+        }
+        return Integer.parseInt(numTree.toString());
+    }
+
+    private int performAdd(Tree addition){
+        if (addition.hasNamed("addSubD")){
+            if (addition.getNamedChild("addSubD").toString().equals("+")) {
+                return interpret(addition.getChild(0)) + interpret(addition.getNamedChild("multDivOp"));
+            }
+            else if (addition.getNamedChild("addSubD").toString().equals("-")){
+                return interpret(addition.getChild(0)) - interpret(addition.getNamedChild("multDivOp"));
+            }
+            return 0;
+        }
+        else {
+            return interpret(addition.getChild(0));
+        }
+    }
+
+    private int performMultiply(Tree multi){
+        if (multi.getNumChildren() > 1){
+            if (multi.getNamedChild("multDivD").toString().equals("*")){
+                return interpret(multi.getChild(0)) * interpret(multi.getLastChild());
+            }
+            else {
+                return interpret(multi.getChild(0)) / interpret(multi.getLastChild());
+            }
+        }
+        else {
+            return interpret(multi.getChild(0));
+        }
+    }
+
+    private void handleAssignment(Tree assignment){
+        String variableName = assignment.getNamedChild("variable").toString();
+        Integer value = interpret(assignment.getNamedChild("addSubOp"));
+        Controller.publicVariables.put(variableName, value);
+    }
+
+    private int getNum(Tree number){
+        if (number.hasNamed("variable")){
+            return interpret(number.getChild(0));
+        }
+        else {
+            return Integer.parseInt(number.toString());
+        }
+    }
+
+    private void evaluateLoop(Tree loop){
+        int numRepeats = interpret(loop.getNamedChild("addSubOp"));
+        System.out.println("Called, looping for " + numRepeats + " times!");
+        for (int i = 0; i < numRepeats; ++i){
+            interpret(loop.getNamedChild("block"));
+        }
+    }
+
+    private void callFunction(Tree function){
+        variableStack.push((HashMap)variables.clone());
+        if (function.hasNamed("functionCall")){
+            interpret(function.getNamedChild("functionCall"));
+            handleCommand(function);
+        }
+        ArrayList vars = getVarValues(function.getNamedChild("fvars"));
+        log("Calling function: " + function.getNamedChild("fname").toString() + " with " + vars.size() + " variables");
+        for (Object var : vars){
+            log("\t" + var.toString());
+        }
+        handleCommand(function);
+        variables = variableStack.pop();
+    }
+
+    private void evaluateBoolean(Tree boolExpr){
+        boolean condition = evaluateBooleanExpression(boolExpr.getNamedChild("boolCond"));
+        if (condition) {
+            interpret(boolExpr.getNamedChild("block"));
+        }
+        else  if (boolExpr.isNamed("ifelse")){
+            interpret(boolExpr.getNamedChild("elseBlock"));
+        }
+    }
+
+    private void declareFunction(Tree func){
+        String functionName = func.getNamedChild("fname").toString();
+        log("Declaring function: " + functionName);
+        ArrayList<String> variables = setVariableName(func.getNamedChild("funcVars"));
+        functions.put(functionName, variables);
+        functionBlocks.put(functionName, func.getNamedChild("block"));
+    }
+
+    private int processStatement(Tree statement){
+        if (statement.hasNamed("num")) {
+            return interpret(statement.getNamedChild("num"));
+        }
+        else {
+            return interpret(statement.getChild(0));
+        }
+    }
+
+    private void customFunctionCall(String name, ArrayList<Integer> values){
+        if (functions.containsKey(name)) {
+            ArrayList<String> variables = this.functions.get(name);
+            if (values.size() == variables.size()) {
+                Tree block = functionBlocks.get(name);
+                for (int i = 0; i < values.size(); ++i) {
+                    System.out.println("VariableName: " + variables.get(i) + ", Value: " + values.get(i));
+                    this.variables.put(variables.get(i), values.get(i));
+                }
+                interpret(block);
+            }
+            else {
+                parent.showError("Incorrect number of variables for function (" + name + ")\n\t expected " + variables.size() + " but received " + values.size());
+            }
+        }
+        else {
+            parent.showError("Function (" + name + ") is not declared");
+        }
+    }
+
+    private void log(String message){
+        if(debugging)
+            System.out.println(message);
     }
 
     public void run(){

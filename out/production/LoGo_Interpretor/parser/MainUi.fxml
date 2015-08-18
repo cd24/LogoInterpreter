@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parser.Controller">
+   <center>
+      <Pane fx:id="canvas" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView id="turtle" fx:id="turtleImage" fitHeight="28.0" fitWidth="29.0" layoutX="295.0" layoutY="197.0" rotate="90.0">
+               <image>
+                  <Image url="@di07G.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
+   </center>
+   <left>
+      <VBox prefHeight="371.0" prefWidth="201.0" BorderPane.alignment="CENTER">
+         <children>
+            <BorderPane>
+               <left>
+                  <Button fx:id="left" mnemonicParsing="false" onAction="#moveLeft" text="  Left " BorderPane.alignment="CENTER" />
+               </left>
+               <top>
+                  <Button fx:id="forward" mnemonicParsing="false" onAction="#moveForward" text="Forward" BorderPane.alignment="CENTER" />
+               </top>
+               <right>
+                  <Button fx:id="right" mnemonicParsing="false" onAction="#moveRight" text="Right" BorderPane.alignment="CENTER" />
+               </right>
+               <bottom>
+                  <Button fx:id="backward" mnemonicParsing="false" onAction="#moveBackward" text="Backwards" BorderPane.alignment="CENTER" />
+               </bottom>
+               <center>
+                  <Button mnemonicParsing="false" onAction="#clearScreen" text="Clear Screen" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <TextArea fx:id="passedCommands" prefHeight="670.0" prefWidth="154.0" promptText="Executed Commands" />
+            <TextField fx:id="singleCommand" onAction="#giveSingleCommand" promptText="Single Command" />
+         </children>
+      </VBox>
+   </left>
+   <bottom>
+      <TabPane fx:id="tabs" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Editor">
+               <content>
+                  <HBox>
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#runScript" text="Run">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="reset" mnemonicParsing="false" text="Interrupt" />
+                           </children>
+                        </VBox>
+                        <TextArea fx:id="editor" maxHeight="200.0" prefHeight="100.0" prefWidth="732.0" promptText="Editor " />
+                     </children>
+                  </HBox>
+               </content>
+          </Tab>
+          <Tab text="Preferences">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label text="Pen Color">
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </Label>
+                              <ColorPicker fx:id="lineColorPicker" onAction="#changeColor" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Turtle Size">
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Slider fx:id="turtleScale" majorTickUnit="0.1" max="1.0" minorTickCount="0" onDragDetected="#changeTurtleScale" prefHeight="14.0" prefWidth="308.0" snapToTicks="true" value="0.5" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Button Distance">
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Slider fx:id="buttonDistance" blockIncrement="1.0" majorTickUnit="5.0" minorTickCount="1" snapToTicks="true" value="10.0">
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="10.0" />
+                                 </HBox.margin>
+                              </Slider>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label text="Button Rotation" />
+                              <Slider fx:id="buttonRotation" blockIncrement="15.0" majorTickUnit="45.0" max="360.0" minorTickCount="15" snapToTicks="true" value="45.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#resetDefaultSettings" text="Reset Defaults" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+            <Tab text="Errors">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="errors" layoutX="4.0" layoutY="3.0" prefHeight="162.0" prefWidth="793.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="3.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </bottom>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#readFromFile" text="Open File" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveToFile" text="Save File" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveToImage" text="Export to Image" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#showHelp" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>

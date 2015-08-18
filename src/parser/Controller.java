@@ -75,8 +75,6 @@ public class Controller implements Initializable{
 
     Thread evalThread = new Thread();
 
-    public static boolean penDown = true;
-
     public static Color penColor = Color.BLACK;
 
     public static HashMap<String, Integer> publicVariables = new HashMap<>();
@@ -166,7 +164,7 @@ public class Controller implements Initializable{
     }
 
     void createLine(Point2D start, Point2D end){
-        if (penDown) {
+        if (Turtle.penDown) {
             Line connector = new Line();
             connector.setStartX(start.getX());
             connector.setStartY(start.getY());
@@ -289,11 +287,4 @@ public class Controller implements Initializable{
         showError(loadHelp());
     }
 
-    public static boolean isPenDown(){
-        return penDown;
-    }
-
-    public static void setPenDown(boolean down){
-        penDown = down;
-    }
 }
